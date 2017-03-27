@@ -1,1 +1,26 @@
 
+<% @products.each do |p| %>
+	<div id="body-<%= p.id %>"><%= truncate p.description %></div>
+	<button class="js-ready" data-id="<%= p.id %>">Read More</button>
+<% end %>
+
+<script>
+	$(document).ready(function(){
+		$(".js-ready").click(function(){
+			let dataid = $(this).data("id")
+			$.get("/products/" + dataid + "/description", function(data){
+				$("#body-"+ dataid).text(data)
+			})
+			$.get("/products/" + dataid + "/inventory", function(data){
+				if (data==="true"){
+					$("#body-"+ dataid).append("Available")					
+				}
+				else{
+					$("#body-"+ dataid).append("Sold Out")		
+				}
+			})
+
+		})
+	})
+
+</script>
